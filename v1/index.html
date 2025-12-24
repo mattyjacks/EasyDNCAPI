@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyDNC Checker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📞 EasyDNC Checker</h1>
+            <p>Upload a CSV file to check phone numbers against the Do-Not-Call registry</p>
+        </header>
+
+        <div class="terms-banner">
+            <h2>⚠️ TERMS OF USE - READ BEFORE USING</h2>
+            <p><strong>THIS IS A PRIVATE PROGRAM FOR INTERNAL USE ONLY</strong></p>
+            <ul>
+                <li>This software is provided <strong>AS-IS with NO WARRANTY</strong> of any kind</li>
+                <li>This software is for <strong>PRIVATE INTERNAL USE ONLY</strong></li>
+                <li><strong>UNAUTHORIZED USE IS PROHIBITED:</strong> You are NOT authorized to use any publicly hosted version unless explicitly authorized by <strong>Matt Jackson</strong></li>
+                <li>The author assumes no liability for damages, losses, or consequences from use</li>
+            </ul>
+        </div>
+
+        <section class="api-key-section">
+            <h2>API Key Configuration</h2>
+            <div class="input-group">
+                <input type="password" id="apiKey" placeholder="Enter your EasyDNC API Key" />
+                <button id="saveApiKey" class="btn btn-primary">Save API Key</button>
+                <button id="clearApiKey" class="btn btn-secondary">Clear</button>
+            </div>
+            <p class="status-message" id="apiKeyStatus"></p>
+        </section>
+
+        <section class="upload-section" id="uploadSection" style="display: none;">
+            <h2>Upload CSV File</h2>
+            <div class="file-upload">
+                <input type="file" id="csvFile" accept=".csv" />
+                <label for="csvFile" class="file-label">Choose CSV File</label>
+                <span id="fileName" class="file-name"></span>
+            </div>
+        </section>
+
+        <section class="column-selection" id="columnSection" style="display: none;">
+            <h2>Select Phone Number Column</h2>
+            <div class="preview-table">
+                <table id="previewTable"></table>
+            </div>
+            <div class="input-group">
+                <label for="phoneColumn">Phone Number Column:</label>
+                <select id="phoneColumn"></select>
+                <button id="processBtn" class="btn btn-primary">Check DNC Status</button>
+            </div>
+        </section>
+
+        <section class="price-confirmation" id="priceSection" style="display: none;">
+            <h2>Price Confirmation</h2>
+            <div class="price-info">
+                <p><strong>Total Phone Numbers:</strong> <span id="totalNumbers">0</span></p>
+                <p><strong>Cost Per Lookup:</strong> $0.025</p>
+                <p><strong>Estimated Total Cost:</strong> <span id="estimatedCost">$0.00</span></p>
+            </div>
+            <div class="input-group">
+                <button id="confirmBtn" class="btn btn-success">Confirm and Process</button>
+                <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </section>
+
+        <section class="progress-section" id="progressSection" style="display: none;">
+            <h2>Processing...</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">0 / 0</p>
+            <p class="balance-text" id="balanceText"></p>
+        </section>
+
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <h2>Results</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Checked</h3>
+                    <p id="totalChecked">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>On DNC</h3>
+                    <p id="onDNC">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Not on DNC</h3>
+                    <p id="notOnDNC">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Cost</h3>
+                    <p id="totalCost">$0.00</p>
+                </div>
+            </div>
+            <div class="download-buttons">
+                <button id="downloadComplete" class="btn btn-primary">Download Complete File</button>
+                <button id="downloadClean" class="btn btn-success">Download Clean File (Not on DNC)</button>
+            </div>
+            <button id="resetBtn" class="btn btn-secondary">Process Another File</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
