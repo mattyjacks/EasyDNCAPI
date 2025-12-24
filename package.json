@@ -1,0 +1,14 @@
+{
+  "name": "easydnc-api",
+  "version": "1.0.0",
+  "description": "EasyDNC API Toolset - Private Internal Use Only",
+  "main": "proxy-server.js",
+  "scripts": {
+    "proxy": "node proxy-server.js",
+    "start": "node proxy-server.js"
+  },
+  "keywords": ["dnc", "easydnc"],
+  "author": "Matt Jackson",
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -4,7 +4,8 @@ let headers = [];
 let processedData = [];
 let phoneColumnIndex = -1;
 
-const API_ENDPOINT = 'https://www.easydnc.org/api/check_dnc.php';
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+const API_ENDPOINT = isLocalhost ? 'http://localhost:3000/api/check_dnc' : 'https://www.easydnc.org/api/check_dnc.php';
 const COST_PER_LOOKUP = 0.025;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -231,15 +232,31 @@ async function processDNCChecks() {
     showResults(totalCharged);
 }
 
+function normalizePhoneNumber(phoneNumber) {
+    const digits = phoneNumber.replace(/\D/g, '');
+    
+    if (digits.length === 11 && digits.startsWith('1')) {
+        return digits.substring(1);
+    }
+    
+    if (digits.length === 10) {
+        return digits;
+    }
+    
+    throw new Error(`Invalid phone number format: ${phoneNumber} (need 10 digits, got ${digits.length})`);
+}
+
 async function checkDNC(phoneNumber) {
     try {
+        const normalizedNumber = normalizePhoneNumber(phoneNumber);
+        
         const response = await fetch(API_ENDPOINT, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ number: phoneNumber })
+            body: JSON.stringify({ number: normalizedNumber })
         });
         
         const data = await response.json();
