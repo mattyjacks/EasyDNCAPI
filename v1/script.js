@@ -250,13 +250,10 @@ async function checkDNC(phoneNumber) {
     try {
         const normalizedNumber = normalizePhoneNumber(phoneNumber);
         
-        const response = await fetch(API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ number: normalizedNumber })
+        const url = `${API_ENDPOINT}?key=${encodeURIComponent(apiKey)}&number=${encodeURIComponent(normalizedNumber)}`;
+        
+        const response = await fetch(url, {
+            method: 'GET'
         });
         
         const data = await response.json();

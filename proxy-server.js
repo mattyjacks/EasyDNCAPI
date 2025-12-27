@@ -16,7 +16,37 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    if (req.url === '/api/check_dnc' && req.method === 'POST') {
+    if (req.url.startsWith('/api/check_dnc') && req.method === 'GET') {
+        console.log('=== Proxying GET Request ===');
+        console.log('URL:', req.url);
+        console.log('======================');
+        
+        const fullUrl = EASYDNC_API + req.url.replace('/api/check_dnc', '');
+        
+        const apiReq = https.request(fullUrl, { method: 'GET' }, (apiRes) => {
+            let responseData = '';
+
+            apiRes.on('data', chunk => {
+                responseData += chunk;
+            });
+
+            apiRes.on('end', () => {
+                console.log('API Response Status:', apiRes.statusCode);
+                console.log('API Response Body:', responseData);
+                console.log('======================\n');
+                res.writeHead(apiRes.statusCode, { 'Content-Type': 'application/json' });
+                res.end(responseData);
+            });
+        });
+
+        apiReq.on('error', (error) => {
+            console.error('Proxy error:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Proxy server error' }));
+        });
+
+        apiReq.end();
+    } else if (req.url === '/api/check_dnc' && req.method === 'POST') {
         let body = '';
         
         req.on('data', chunk => {
@@ -26,6 +56,11 @@ const server = http.createServer((req, res) => {
         req.on('end', () => {
             const requestData = JSON.parse(body);
             const authHeader = req.headers['authorization'];
+            
+            console.log('=== Proxying Request ===');
+            console.log('Authorization:', authHeader);
+            console.log('Request Body:', JSON.stringify(requestData));
+            console.log('======================');
             
             const options = {
                 method: 'POST',
@@ -43,6 +78,9 @@ const server = http.createServer((req, res) => {
                 });
 
                 apiRes.on('end', () => {
+                    console.log('API Response Status:', apiRes.statusCode);
+                    console.log('API Response Body:', responseData);
+                    console.log('======================\n');
                     res.writeHead(apiRes.statusCode, { 'Content-Type': 'application/json' });
                     res.end(responseData);
                 });
